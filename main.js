@@ -8,11 +8,13 @@ const loader = new GLTFLoader();
 //Create scene
 const scene = new THREE.Scene();
 
+//let mixer = new THREE.animationMixer();
+
 //Renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0x000000, 1);
+renderer.setClearColor(0x235964, 1);
 document.body.appendChild(renderer.domElement);
 
 //Camera (FOV, aspect ratio, clipping dist near, clipping dist far)
@@ -26,8 +28,8 @@ const controls = new OrbitControls(camera, renderer.domElement);
 camera.position.set(0, 1, 5);
 controls.enableDamping = true;
 controls.enablePan = false;
-controls.maxDistance = 10;
-controls.minDistance = 1;
+controls.maxDistance = 5;
+controls.minDistance = 3;
 controls.maxPolarAngle = Math.PI / 2;
 
 //Add lights
@@ -43,15 +45,69 @@ const bowlMaterial = new THREE.MeshPhysicalMaterial({
   envMapIntensity: 0.9,
   clearcoat: 1,
   transparent: true,
-  transmission: 0.95,
+  transmission: 0.6,
   opacity: 1,
   reflectivity: 0.2,
 });
 
-//Add cube and apply material
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const cube = new THREE.Mesh(geometry, bowlMaterial);
-scene.add(cube);
+//Load objects
+const bowlUrl = "models/bowl.glb";
+loader.load(bowlUrl, (gltf) => {
+  console.log(gltf);
+
+  const model = gltf.scene;
+  scene.add(model);
+
+  model.traverse((o) => {
+    if (o.isMesh) {
+      o.material = bowlMaterial;
+    }
+  });
+});
+
+const sandUrl = "models/sand.glb";
+loader.load(sandUrl, (gltf) => {
+  const model = gltf.scene;
+  scene.add(model);
+});
+
+const ballUrl = "models/beachball.glb";
+loader.load(ballUrl, (gltf) => {
+  const model = gltf.scene;
+  scene.add(model);
+});
+
+const starfishUrl = "models/starfish.glb";
+loader.load(starfishUrl, (gltf) => {
+  const model = gltf.scene;
+  scene.add(model);
+});
+
+const waterUrl = "models/water.glb";
+loader.load(waterUrl, (gltf) => {
+  const model = gltf.scene;
+  scene.add(model);
+
+  model.traverse((o) => {
+    if (o.isMesh) {
+      o.material = bowlMaterial;
+    }
+  });
+});
+
+//TURTLE
+const turtleUrl = "models/turtle.glb";
+loader.load(turtleUrl, (gltf) => {
+  const model = gltf.scene;
+  scene.add(model);
+
+  mixer = THREE.animationMixer(model);
+  //mixer = new THREE.animationMixer(model);
+  const clip = THREE.AnimationClip.findByName(clips, "animation-name");
+  const action = mixer.clipAction(clip);
+  action.play();
+  //action?.play();
+});
 
 //Render scene
 function animate() {
