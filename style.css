@@ -1,0 +1,11 @@
+.header-bar {
+  text-align: center;
+  background-color: lightblue;
+  padding: 0.6rem;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
