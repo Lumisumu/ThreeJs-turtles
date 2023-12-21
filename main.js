@@ -95,24 +95,23 @@ loader.load(waterUrl, (gltf) => {
   });
 });
 
-//TURTLE
-const turtleUrl = "models/turtle.glb";
-loader.load(turtleUrl, (gltf) => {
+const tortoiseAUrl = "models/tortoiseA.glb";
+loader.load(tortoiseAUrl, (gltf) => {
   const model = gltf.scene;
   scene.add(model);
-
-  mixer = THREE.animationMixer(model);
-  //mixer = new THREE.animationMixer(model);
-  const clip = THREE.AnimationClip.findByName(clips, "animation-name");
-  const action = mixer.clipAction(clip);
-  action.play();
-  //action?.play();
 });
 
+const tortoiseBUrl = "models/tortoiseB.glb";
+loader.load(tortoiseBUrl, (gltf) => {
+  const model = gltf.scene;
+  scene.add(model);
+});
+
+animate();
+
 //Render scene
-function animate() {
-  requestAnimationFrame(animate);
+function animate(mixer) {
   controls.update();
   renderer.render(scene, camera);
+  requestAnimationFrame(animate);
 }
-animate();
